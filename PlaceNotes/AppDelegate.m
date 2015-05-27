@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "NotesViewController.h"
+#import "Note.h"
 
 @interface AppDelegate ()
 
@@ -17,7 +19,22 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    // Ladda in våra default links i masterViewControllern
+    UINavigationController *navController = (UINavigationController *) self.window.rootViewController;
+    NotesViewController *notesViewController = (NotesViewController *)navController.topViewController;
+    notesViewController.notes = [self defaultLinks].mutableCopy;
+    
     return YES;
+}
+
+- (NSArray *)defaultLinks {
+    
+    Note *firstNote = [[Note alloc] initWithNote:@"This is a first note" Title:@"Notetitle" Location:CLLocationCoordinate2DMake(63.8188147, 20.2901947)];
+   
+    Note *secondNote = [[Note alloc] initWithNote:@"This is a second note without title" Title:@"" Location:CLLocationCoordinate2DMake(63.8188147, 20.2901947)];
+    
+    return @[firstNote, secondNote];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
