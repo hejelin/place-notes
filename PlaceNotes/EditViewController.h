@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "Note.h"
+#import <Parse/Parse.h>
 
 @protocol EditViewControllerDelegate <NSObject>
 
 - (void)didSaveNote:(NSString *)note Title:(NSString *)title;
+- (void)didUpdateNote:(PFObject *)noteObj Note:(NSString *)note Title:(NSString *)title;
 
 @optional - (void)didSaveNote:(NSString *)note;
 
@@ -22,7 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *titleField;
 @property (weak, nonatomic) IBOutlet UITextField *noteField;
 
-@property (nonatomic, strong) Note *note;
+@property (nonatomic, strong) PFObject *note;
 
 @property (weak, nonatomic) IBOutlet id<EditViewControllerDelegate> delegate;
 

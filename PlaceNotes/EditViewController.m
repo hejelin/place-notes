@@ -18,8 +18,8 @@
     [super viewDidLoad];
     
     if (self.note != nil) {
-        self.titleField.text = self.note.title;
-        self.noteField.text = self.note.note;
+        self.titleField.text = self.note[@"title"];
+        self.noteField.text = self.note[@"note"];
     }
 }
 
@@ -33,20 +33,24 @@
     NSString *title = self.titleField.text;
     NSString *note = self.noteField.text;
     
-    // If URL is correct, the data is sent to the delegate, else user is alerted
-    if (note.length > 0 && title.length == 0) {
-        [self.delegate didSaveNote:note];
-    } else if (note.length > 0 && title.length > 0) {
-        [self.delegate didSaveNote:note Title:title];
+    if (self.note != nil) {
+        [self.delegate didUpdateNote:self.note Note:note Title:title];
     } else {
-        UIAlertController *alertViewController = [UIAlertController alertControllerWithTitle:@"Empty"
-                                                                                     message:@"You can't create an empty note"
-                                                                              preferredStyle:UIAlertControllerStyleAlert];
+        // If URL is correct, the data is sent to the delegate, else user is alerted
+        if (note.length > 0 && title.length == 0) {
+            [self.delegate didSaveNote:note];
+        } else if (note.length > 0 && title.length > 0) {
+            [self.delegate didSaveNote:note Title:title];
+        } else {
+            UIAlertController *alertViewController = [UIAlertController alertControllerWithTitle:@"Empty"
+                                                                                         message:@"You can't create an empty note"
+                                                                                  preferredStyle:UIAlertControllerStyleAlert];
         
-        UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-        [alertViewController addAction:okButton];
+            UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [alertViewController addAction:okButton];
         
-        [self presentViewController:alertViewController animated:YES completion:nil];
+            [self presentViewController:alertViewController animated:YES completion:nil];
+        }
     }
 }
 

@@ -10,7 +10,7 @@
 #import "EditViewController.h"
 #import <CoreLocation/CoreLocation.h>
 
-@interface NotesViewController : UITableViewController <EditViewControllerDelegate>
+@interface NotesViewController : UITableViewController <EditViewControllerDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) NSMutableArray *notes;
 

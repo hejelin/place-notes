@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "NotesViewController.h"
 #import "Note.h"
+#import <Parse/Parse.h>
 
 @interface AppDelegate ()
 
@@ -18,12 +19,29 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+
     
     // Ladda in våra default links i masterViewControllern
-    UINavigationController *navController = (UINavigationController *) self.window.rootViewController;
+    /*UINavigationController *navController = (UINavigationController *) self.window.rootViewController;
     NotesViewController *notesViewController = (NotesViewController *)navController.topViewController;
-    notesViewController.notes = [self defaultLinks].mutableCopy;
+    notesViewController.notes = [self defaultLinks].mutableCopy;*/
+    
+    
+    [Parse enableLocalDatastore];
+    [Parse setApplicationId:@"gdUPaPvAoF1YG5VtPsTeColKbok50FPVERfwtMDv"
+                  clientKey:@"VFnP34UKUm066mpfB5w0CsRNU2x64eySOGzbTwq7"];
+    
+    
+    // Register for Push Notitications
+    /*UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                    UIUserNotificationTypeBadge |
+                                                    UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];*/
+    
+    
     
     return YES;
 }
