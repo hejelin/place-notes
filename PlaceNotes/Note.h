@@ -8,20 +8,16 @@
 
 #import <CoreLocation/CoreLocation.h>
 #import <Foundation/Foundation.h>
+#import <Parse/Parse.h>
 
-@interface Note : NSObject
+@interface Note : PFObject
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *note;
-@property (nonatomic) CLLocationCoordinate2D location;
-
--(instancetype) initWithNote:(NSString *)note
-                    Location:(CLLocationCoordinate2D)location;
-
--(instancetype) initWithNote:(NSString *)note
-                       Title:(NSString *)title
-                    Location:(CLLocationCoordinate2D)location;
+@property (nonatomic, strong) NSString *objectId;
 
 
+- (instancetype)initWithPFObject:(PFObject *) obj;
+- (BOOL)isUpdated:(id)object;
 
 @end

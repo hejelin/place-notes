@@ -14,7 +14,6 @@
 		B62BEFC21AE808C800AB0DD1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B62BEFC01AE808C800AB0DD1 /* LaunchScreen.xib */; };
 		B62BEFCE1AE808C800AB0DD1 /* PlaceNotesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B62BEFCD1AE808C800AB0DD1 /* PlaceNotesTests.m */; };
 		B62BEFDC1AE813C600AB0DD1 /* NotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62BEFDB1AE813C600AB0DD1 /* NotesViewController.m */; };
-		B62BEFDF1AE813E500AB0DD1 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = B62BEFDE1AE813E500AB0DD1 /* Note.m */; };
 		B6AC71531AEFDBD4006AD32C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6AC71511AEFDBD4006AD32C /* Main.storyboard */; };
 		B6AC71551AF7A03F006AD32C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6AC71541AF7A03F006AD32C /* CoreLocation.framework */; };
 		B6E979031B1467B300B8EB7D /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6E979021B1467B300B8EB7D /* Parse.framework */; };
@@ -56,8 +55,6 @@
 		B62BEFCD1AE808C800AB0DD1 /* PlaceNotesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlaceNotesTests.m; sourceTree = "<group>"; };
 		B62BEFDA1AE813C600AB0DD1 /* NotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotesViewController.h; sourceTree = "<group>"; };
 		B62BEFDB1AE813C600AB0DD1 /* NotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotesViewController.m; sourceTree = "<group>"; };
-		B62BEFDD1AE813E500AB0DD1 /* Note.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Note.h; sourceTree = "<group>"; };
-		B62BEFDE1AE813E500AB0DD1 /* Note.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Note.m; sourceTree = "<group>"; };
 		B6AC71521AEFDBD4006AD32C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B6AC71541AF7A03F006AD32C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B6E979021B1467B300B8EB7D /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
@@ -127,7 +124,6 @@
 		B62BEFB01AE808C800AB0DD1 /* PlaceNotes */ = {
 			isa = PBXGroup;
 			children = (
-				B62BEFD91AE813A500AB0DD1 /* Models */,
 				B62BEFD71AE8138C00AB0DD1 /* Controllers */,
 				B62BEFB51AE808C800AB0DD1 /* AppDelegate.h */,
 				B62BEFB61AE808C800AB0DD1 /* AppDelegate.m */,
@@ -174,15 +170,6 @@
 				B62BEFDB1AE813C600AB0DD1 /* NotesViewController.m */,
 			);
 			name = Controllers;
-			sourceTree = "<group>";
-		};
-		B62BEFD91AE813A500AB0DD1 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				B62BEFDD1AE813E500AB0DD1 /* Note.h */,
-				B62BEFDE1AE813E500AB0DD1 /* Note.m */,
-			);
-			name = Models;
 			sourceTree = "<group>";
 		};
 		B6E979061B1467E000B8EB7D /* Frameworks */ = {
@@ -305,7 +292,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B62BEFDF1AE813E500AB0DD1 /* Note.m in Sources */,
 				B62BEFBA1AE808C800AB0DD1 /* EditViewController.m in Sources */,
 				B62BEFB71AE808C800AB0DD1 /* AppDelegate.m in Sources */,
 				B62BEFB41AE808C800AB0DD1 /* main.m in Sources */,

@@ -23,11 +23,6 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 // Delegate function
 - (IBAction)saveFormData:(id)sender {
     NSString *title = self.titleField.text;
@@ -36,14 +31,12 @@
     if (self.note != nil) {
         [self.delegate didUpdateNote:self.note Note:note Title:title];
     } else {
-        // If URL is correct, the data is sent to the delegate, else user is alerted
-        if (note.length > 0 && title.length == 0) {
-            [self.delegate didSaveNote:note];
-        } else if (note.length > 0 && title.length > 0) {
+        // If title and note is correct, the data is sent to the delegate, else user is alerted
+        if (note.length > 0 && title.length > 0) {
             [self.delegate didSaveNote:note Title:title];
         } else {
             UIAlertController *alertViewController = [UIAlertController alertControllerWithTitle:@"Empty"
-                                                                                         message:@"You can't create an empty note"
+                                                                                         message:@"You can't create an empty note, it has to have a title and note"
                                                                                   preferredStyle:UIAlertControllerStyleAlert];
         
             UIAlertAction *okButton = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];

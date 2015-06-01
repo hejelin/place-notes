@@ -8,7 +8,6 @@
 
 #import "NotesViewController.h"
 #import "EditViewController.h"
-#import "Note.h"
 #import <Parse/Parse.h>
 
 @interface NotesViewController ()
@@ -27,7 +26,7 @@
     if (self) {
         self.expandedCellIndex = -1;
         
-        //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(distanceFilterDidChange:) name:@"ChangedDistance" object:nil];
+        // Register with notification center
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationDidChange:) name:@"ChangedLocation" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notesWereUpdated:) name:@"UpdatedNotes" object:nil];
     }
@@ -64,27 +63,23 @@
     [self.locationManager startUpdatingLocation];
 }
 
+// Load notes from Parse
 - (void)loadNotes {
     
     PFGeoPoint *userGeoPoint = [PFGeoPoint geoPointWithLocation:self.locationManager.location];
     
+    // Get all notes within 300 meters
     PFQuery *query = [PFQuery queryWithClassName:@"Note"];
     [query whereKey:@"location" nearGeoPoint:userGeoPoint withinKilometers:0.3];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
-            [self.notes removeAllObjects]; //TODO - check, hämta bara ny data
+            [self.notes removeAllObjects];
             self.notes = [objects mutableCopy];
             [self.tableView reloadData];
         }
     }];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 
 #pragma mark - Location manager delegate methods
 
@@ -143,13 +138,13 @@
                                                       otherButtonTitles:@"Ok", nil];
             [alertView show];
             return;
+        } else {
+            // Dispatch notification about created note
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdatedNotes" object:nil];
+            });
         }
     }];
-    
-    // Dispatch notification about created note
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdatedNotes" object:nil];
-    });
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -164,14 +159,16 @@
                                      if (!error) {
                                          noteUpd[@"title"] = title;
                                          noteUpd[@"note"] = note;
-                                         [noteUpd saveInBackground];
+                                         [noteUpd saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                             if (!error) {
+                                                 // Dispatch notification about updated note
+                                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                                     [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdatedNotes" object:nil];
+                                                 });
+                                             }
+                                         }];
                                      }
                                  }];
-    
-    // Dispatch notification about updated note
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdatedNotes" object:nil];
-    });
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -205,8 +202,31 @@
     cell.textLabel.text = note[@"title"];
     cell.detailTextLabel.text = note[@"note"];
     
+    UIButton *editButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [editButton addTarget:self
+                   action:@selector(editCell)
+         forControlEvents:UIControlEventTouchUpInside];
+    [editButton setTitle:@"Edit" forState:UIControlStateNormal];
+    editButton.frame = CGRectMake(15.0, 112.0, 70.0, 30.0);
+    editButton.tintColor = self.view.tintColor;
+    [cell.contentView addSubview:editButton];
+    editButton.titleLabel.font = [UIFont  fontWithName:@"HelveticaNeue-Light" size:15.0];
+    
+    UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [deleteButton addTarget:self
+                   action:@selector(deleteCell)
+         forControlEvents:UIControlEventTouchUpInside];
+    [deleteButton setTitle:@"Delete" forState:UIControlStateNormal];
+    deleteButton.frame = CGRectMake(100.0, 112.0, 70.0, 30.0);
+    deleteButton.tintColor = self.view.tintColor;
+    [cell.contentView addSubview:deleteButton];
+    deleteButton.titleLabel.font = [UIFont  fontWithName:@"HelveticaNeue-Light" size:15.0];
+    
     return cell;
 }
+
+
+#pragma mark - Cell selection
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -215,7 +235,6 @@
     }
     else {
         self.expandedCellIndex = indexPath.row;
-//        [self.tableView cellForRowAtIndexPath:indexPath].subviews
     }
     [tableView beginUpdates];
     [tableView endUpdates];
@@ -225,37 +244,43 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (_expandedCellIndex == indexPath.row) {
-        return 75;
-    } else {
         return 150;
+    } else {
+        return 75;
     }
 }
 
-// Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
         // Delete object from Parse
         PFQuery *query = [PFQuery queryWithClassName:@"Note"];
         [query getObjectInBackgroundWithId:[[self.notes objectAtIndex:indexPath.row] objectId] block:^(PFObject *note, NSError *error) {
-            [note deleteInBackground];
+            [note deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                [self.notes removeObjectAtIndex:indexPath.row];
+                self.expandedCellIndex = -1;
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            }];
         }];
-        
-        [self.notes removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
+#pragma mark - Cell actions
 
 - (IBAction)deleteCell {
     // Delete object from Parse
     PFQuery *query = [PFQuery queryWithClassName:@"Note"];
     [query getObjectInBackgroundWithId:[[self.notes objectAtIndex:self.expandedCellIndex] objectId] block:^(PFObject *note, NSError *error) {
-        [note deleteInBackground];
+        [note deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            [self.notes removeObjectAtIndex:self.expandedCellIndex];
+            [self loadNotes];
+            self.expandedCellIndex = -1;
+        }];
     }];
-    
-    [self.notes removeObjectAtIndex:self.expandedCellIndex];
-    [self loadNotes];
+}
+
+- (IBAction)editCell {
+    [self performSegueWithIdentifier:@"editSegue" sender:self];
 }
 
 

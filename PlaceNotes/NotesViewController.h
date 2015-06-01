@@ -13,7 +13,5 @@
 @interface NotesViewController : UITableViewController <EditViewControllerDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) NSMutableArray *notes;
-@property (weak, nonatomic) IBOutlet UILabel *noteLabel;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end

@@ -10,39 +10,31 @@
 
 @implementation Note
 
--(instancetype) initWithNote:(NSString *)note
-                    Location:(CLLocationCoordinate2D)location {
+@synthesize title;
+@synthesize note;
+@synthesize objectId;
+
+-(instancetype) initWithPFObject:(PFObject *)obj {
     self = [super init];
     
-    if (self) {
-        self.note = note;
-        self.location = location;
-    }
-    
-    
+    self.objectId = obj[@"objectId"];
+    self.note = obj[@"note"];
+    self.title = obj[@"title"];
     
     return self;
 }
 
--(instancetype) initWithNote:(NSString *)note
-                       Title:(NSString *)title
-                    Location:(CLLocationCoordinate2D)location {
-    self = [super init];
+- (BOOL)isEqual:(id)object {
     
-    if (self) {
-        self.note = note;
-        self.title = title;
-        self.location = location;
+    if (self.objectId == ((PFObject *) object)[@"objectId"]) {
+        return true;
+    } else {
+        return false;
     }
-    
-    return self;
 }
 
--(BOOL)isEqual:(id)object {
-
-    Note *note = (Note *) object;
-    
-    if (self.title == note.title && self.note == note.note) {
+- (BOOL)isUpdated:(id)object {
+    if (self.objectId == ((Note *)object).objectId && (self.title != title || self.note != note)) {
         return true;
     } else {
         return false;

@@ -7,15 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Note.h"
 #import <Parse/Parse.h>
 
 @protocol EditViewControllerDelegate <NSObject>
 
 - (void)didSaveNote:(NSString *)note Title:(NSString *)title;
 - (void)didUpdateNote:(PFObject *)noteObj Note:(NSString *)note Title:(NSString *)title;
-
-@optional - (void)didSaveNote:(NSString *)note;
 
 @end
 
