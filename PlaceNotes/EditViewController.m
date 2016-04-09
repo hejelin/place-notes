@@ -8,22 +8,19 @@
 
 #import "EditViewController.h"
 
-@interface EditViewController ()
-
-@end
-
 @implementation EditViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // If editing a note, fill in text fields
     if (self.note != nil) {
         self.titleField.text = self.note[@"title"];
         self.noteField.text = self.note[@"note"];
     }
 }
 
-// Delegate function
+// Save note
 - (IBAction)saveFormData:(id)sender {
     NSString *title = self.titleField.text;
     NSString *note = self.noteField.text;

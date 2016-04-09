@@ -26,4 +26,3 @@
 @property (weak, nonatomic) IBOutlet id<EditViewControllerDelegate> delegate;
 
 @end
-

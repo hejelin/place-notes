@@ -7,7 +7,6 @@
 //
 
 #import "NotesViewController.h"
-#import "EditViewController.h"
 #import <Parse/Parse.h>
 
 @interface NotesViewController ()
@@ -81,7 +80,7 @@
     }];
 }
 
-#pragma mark - Location manager delegate methods
+#pragma mark - Location manager delegate functions
 
 - (CLLocationManager *)locationManager {
     if (_locationManager == nil) {
@@ -113,7 +112,7 @@
 }
 
 
-#pragma mark - EditViewController delegate methods
+#pragma mark - EditViewController delegate functions
 
 - (void)didSaveNote:(NSString *)note Title:(NSString *)title {
     
@@ -177,6 +176,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
+    // If there are no notes, tell the user
     if (self.notes.count == 0) {
         UILabel *noNotesLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
         noNotesLabel.text = @"You have no notes at this location";
@@ -193,6 +193,7 @@
     return self.notes.count;
 }
 
+// Format cell with title, note, edit button and delete button
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NoteCell" forIndexPath:indexPath];
@@ -202,6 +203,7 @@
     cell.textLabel.text = note[@"title"];
     cell.detailTextLabel.text = note[@"note"];
     
+    // Edit button
     UIButton *editButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [editButton addTarget:self
                    action:@selector(editCell)
@@ -212,6 +214,7 @@
     [cell.contentView addSubview:editButton];
     editButton.titleLabel.font = [UIFont  fontWithName:@"HelveticaNeue-Light" size:15.0];
     
+    // Delete button
     UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [deleteButton addTarget:self
                    action:@selector(deleteCell)

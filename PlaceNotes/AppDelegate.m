@@ -7,13 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "NotesViewController.h"
-#import "Note.h"
 #import <Parse/Parse.h>
-
-@interface AppDelegate ()
-
-@end
 
 @implementation AppDelegate
 
